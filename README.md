@@ -38,3 +38,15 @@ We showcase accuracy results, performance graphs, and the user interface to demo
 ## ⚠ Note
 
 This prototype is only for demonstration and research purposes. It is *not a substitute for medical diagnosis*.
+
+🩺 Supported Conditions: Currently, the model is trained to classify only three categories:
+
+*Acne*
+
+*Ringworm*
+
+*Normal Skin*
+
+📷 Best Results: For accurate predictions, please upload a clear image of the affected skin area only rather than a full-body or unrelated photo.
+
+❌ Images outside these categories may lead to incorrect predictions.
