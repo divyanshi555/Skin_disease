@@ -1,6 +1,6 @@
 # SnapHeal– Skin Health Prototype
 
-This project is a prototype of our *AI-powered student wellness platform, starting with a focus on skin health. The current version has been trained on a **small dataset* with three categories:
+This project is a prototype of our *AI-powered student wellness platform*, starting with a focus on skin health. The current version has been trained on a **small dataset* with three categories:
 
 * Clear Skin
 * Ringworm
