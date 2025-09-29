@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapHeal - Predict</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Reset default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Body & Navbar (Keeping styles consistent) */
+        body {
+            background-color: #E6F0FA;
+            color: #333;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 50px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar .logo img {
+            height: 50px;
+        }
+
+        .navbar .logo span {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1E3A8A;
+        }
+
+        .navbar .nav-links a {
+            text-decoration: none;
+            color: #1E3A8A;
+            font-weight: bold;
+            margin-left: 20px;
+            transition: 0.3s;
+        }
+
+        .navbar .nav-links a:hover {
+            color: #2563EB;
+        }
+
+        /* Prediction Page Styles */
+        .prediction-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 80px);
+            padding: 20px;
+        }
+
+        .upload-card {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* Upload Area - Initial State */
+        .upload-area {
+            border: 2px dashed #B0C4DE;
+            border-radius: 8px;
+            padding: 50px 20px;
+            background-color: #F8F9FA;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+        
+        /* Preview Section */
+        #preview-container {
+            display: none; /* Initially hidden */
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        #image-preview {
+            max-width: 100%;
+            max-height: 250px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: block;
+            margin: 0 auto 15px auto;
+        }
+
+        /* Button Group */
+        .button-group {
+            display: none; /* Initially hidden */
+            justify-content: space-around;
+            gap: 20px;
+        }
+
+        /* Submit Button (Primary) */
+        .submit-btn {
+            background-color: #1E3A8A;
+            color: white;
+            padding: 15px 35px;
+            border-radius: 10px;
+            font-size: 18px;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+            flex-grow: 1;
+        }
+
+        .submit-btn:hover {
+            background-color: #2563EB;
+        }
+
+        /* Re-upload Button (Secondary) */
+        .reupload-btn {
+            background-color: #6c757d;
+            color: white;
+            padding: 15px 35px;
+            border-radius: 10px;
+            font-size: 18px;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+            flex-grow: 1;
+        }
+
+        .reupload-btn:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='doctor.png') }}" alt="SnapHeal Logo">
+            <span>SnapHeal</span>
+        </div>
+        <div class="nav-links">
+            <a href="#about">About Us</a>
+        </div>
+    </nav>
+
+    <div class="prediction-container">
+        <form method="POST" action="/upload" enctype="multipart/form-data" class="upload-card" id="upload-form">
+            
+            <label for="file-upload" class="upload-area" id="initial-upload-area">
+                <h3>Upload The Image</h3>
+                <p class="caption">Upload the image to predict what's the disease</p>
+                <div class="drop-zone">
+                    <i class="fas fa-cloud-upload-alt cloud-icon"></i>
+                    <p class="drag-text">Drag & Drop your files here</p>
+                    
+                    <input type="file" id="file-upload" name="file" accept="image/*" style="display: none;" onchange="handleFileSelect(event)">
+                </div>
+            </label>
+
+            <div id="preview-container">
+                <h3>Image Selected</h3>
+                <img id="image-preview" src="#" alt="Image Preview">
+                <p>File Name: <span id="file-name"></span></p>
+            </div>
+
+            <div class="button-group" id="action-buttons">
+                <button type="submit" class="submit-btn">
+                    Submit
+                </button>
+                <button type="button" class="reupload-btn" onclick="resetForm()">
+                    Re-upload
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const initialArea = document.getElementById('initial-upload-area');
+        const previewContainer = document.getElementById('preview-container');
+        const imagePreview = document.getElementById('image-preview');
+        const fileNameDisplay = document.getElementById('file-name');
+        const actionButtons = document.getElementById('action-buttons');
+        const fileInput = document.getElementById('file-upload');
+
+        function handleFileSelect(event) {
+            const file = fileInput.files[0];
+            if (file) {
+                // Read the file for preview
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+
+                // Update text and visibility
+                fileNameDisplay.textContent = file.name;
+                initialArea.style.display = 'none';
+                previewContainer.style.display = 'block';
+                actionButtons.style.display = 'flex';
+            }
+        }
+
+        function resetForm() {
+            // Reset the file input
+            fileInput.value = '';
+
+            // Reset image source
+            imagePreview.src = '#';
+
+            // Reset visibility
+            initialArea.style.display = 'block';
+            previewContainer.style.display = 'none';
+            actionButtons.style.display = 'none';
+            fileNameDisplay.textContent = '';
+        }
+    </script>
+</body>
+</html>
