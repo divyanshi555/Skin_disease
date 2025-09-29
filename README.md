@@ -16,11 +16,16 @@ We showcase accuracy results, performance graphs, and the user interface to demo
 
 ## 📊 Results & Screenshots
 
-(Add your photos here using the format below)
-
-md
+## HOME PAGE
 ![UI Screenshot](image/front.png)
-![Accuracy Graph](images/accuracy.png)
+## UPLOAD PAGE
+![UI Screenshot](image/addImage.png)
+## IMAGE ADDED
+![UI Screenshot](image/uploaded.png)
+## OUTPUT
+![UI Screenshot](image/prediction.png)
+## MODEL ACCURACY CURRENTLY (Trained on 3 datasets - 400+ images)
+![Accuracy Graph](image/accuracy.png)
 
 
 ## 🌱 Future Expansion
