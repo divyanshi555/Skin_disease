@@ -19,7 +19,7 @@ We showcase accuracy results, performance graphs, and the user interface to demo
 (Add your photos here using the format below)
 
 md
-![UI Screenshot](image/Screenshot 2025-09-29 225219.png)
+![UI Screenshot](image/front.png)
 ![Accuracy Graph](images/accuracy.png)
 
 
