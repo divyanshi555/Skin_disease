@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapHeal - Result</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Reset & Fonts */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #E6F0FA;
+            color: #333;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 50px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar .logo img {
+            height: 50px;
+        }
+
+        .navbar .logo span {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1E3A8A;
+        }
+
+        /* Result Container */
+        .prediction-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: calc(100vh - 80px);
+            padding: 20px;
+        }
+
+        .result-card {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .result-card img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+
+        .result-card h2 {
+            color: #1E3A8A;
+        }
+
+        .result-card .section {
+            text-align: left;
+        }
+
+        .result-card .section h3 {
+            color: #2563EB;
+            margin-bottom: 5px;
+        }
+
+        .result-card .back-btn {
+            background-color: #1E3A8A;
+            color: white;
+            padding: 15px 35px;
+            border-radius: 10px;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+
+        .result-card .back-btn:hover {
+            background-color: #2563EB;
+        }
+        .disclaimer-card {
+        position: fixed;       /* keeps it fixed on screen */
+        bottom: 20px;          /* distance from bottom */
+        left: 10%;             /* center horizontally */
+        transform: translateX(-50%); /* center correctly */
+        background-color: #ffffff;   /* white card */
+        border: 1px solid #ccc;      /* light border */
+        border-radius: 10px;
+        padding: 15px 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        text-align: center;
+        font-size: 0.9rem;
+        color: #333;
+        z-index: 9999;         /* make sure it stays on top */
+        max-width: 300px;        /* responsive width */
+    }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='doctor.png') }}" alt="SnapHeal Logo">
+            <span>SnapHeal</span>
+        </div>
+    </nav>
+
+    <!-- Result Card -->
+    <div class="prediction-container">
+        <div class="result-card">
+            <h2>Prediction: {{ prediction }}</h2>
+            <img src="{{ url_for('static', filename=image_name) }}" alt="Uploaded Image">
+
+            <div class="section">
+                <h3>Description</h3>
+                <p>{{ description }}</p>
+            </div>
+
+            <div class="section">
+                <h3>Medical Treatment</h3>
+                <p>{{ treatment }}</p>
+            </div>
+
+            <div class="section">
+                <h3>Home Remedy</h3>
+                <p>{{ remedy }}</p>
+            </div>
+
+            <form action="{{ url_for('predict_page') }}">
+                <button type="submit" class="back-btn">Upload Another Photo</button>
+            </form>
+        </div>
+    </div>
+<!-- Disclaimer Card -->
+    <div class="disclaimer-card">
+        <p>⚠️ This is not a medical diagnosis. This tool is intended for first-step awareness only.It does not claim to be accurate and efficient always. Always consult a qualified healthcare professional for medical advice.</p>
+    </div>
+
+</body>
+</html>
